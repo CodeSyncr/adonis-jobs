@@ -7,6 +7,7 @@
         "mrm": "mrm --preset=@adonisjs/mrm-preset",
         "pretest": "npm run lint",
         "test": "node -r @adonisjs/require-ts/build/register bin/test.ts",
+        "coverage": "nyc --reporter=lcov --reporter=text-summary npm run test",
         "clean": "del-cli build",
         "build": "npm run compile",
         "prepublishOnly": "npm run build",
@@ -48,6 +49,7 @@
         "eslint-plugin-prettier": "^4.2.1",
         "mrm": "^4.1.17",
         "np": "^7.6.3",
+        "nyc": "^17.0.0",
         "prettier": "^2.8.3",
         "typescript": "^5.1.6"
     },
@@ -119,6 +121,14 @@
     },
     "publishConfig": {
         "access": "public"
+    },
+    "nyc": {
+        "exclude": [
+          "test"
+        ],
+        "extension": [
+          ".ts"
+        ]
     },
     "adonisjs": {
         "instructions": "./build/instructions.js",
