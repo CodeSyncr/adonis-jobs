@@ -9,12 +9,6 @@ export default class Listen extends BaseCommand {
   }
 
   /**
-   * Start the bull-board
-   */
-  @flags.boolean({ description: "Run bull's dashboard", alias: 'b' })
-  public board: boolean
-
-  /**
    * Custom port for the bull-board
    */
   @flags.number({
@@ -29,12 +23,6 @@ export default class Listen extends BaseCommand {
   public async run(): Promise<void> {
     const bull = this.application.container.use('Adonis/Addons/Bull')
 
-    console.log({ board: this.board })
-
     bull.process()
-
-    if (this.board || (typeof this.board === 'undefined' && typeof this.port !== 'undefined')) {
-      bull.ui(this.port)
-    }
   }
 }

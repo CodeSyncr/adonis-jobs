@@ -2,7 +2,7 @@
     "name": "@brighthustle/adonis-jobs",
     "version": "1.0.1-0",
     "description": "Bull Job Wrapper for adonis v5",
-    "main": "build/providers/JobsProvider.js",
+    "main": "build/providers/BullProvider.js",
     "scripts": {
         "mrm": "mrm --preset=@adonisjs/mrm-preset",
         "pretest": "npm run lint",
@@ -123,12 +123,12 @@
     },
     "adonisjs": {
         "instructions": "./build/instructions.js",
+        "types": "@brighthustle/adonis-jobs",
         "providers": [
             "@brighthustle/adonis-jobs"
         ],
         "commands": [
             "@brighthustle/adonis-jobs/build/commands"
-        ],
-        "types": "@brighthustle/adonis-jobs"
+        ]
     }
 }
