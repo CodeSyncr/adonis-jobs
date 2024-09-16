@@ -1,6 +1,6 @@
 {
     "name": "@brighthustle/adonis-jobs",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Bull Job Wrapper for adonis v5",
     "main": "build/providers/JobsProvider.js",
     "scripts": {
