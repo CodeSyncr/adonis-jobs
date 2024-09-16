@@ -36,7 +36,6 @@
     "devDependencies": {
         "@adonisjs/core": "^5.9.0",
         "@adonisjs/mrm-preset": "^5.0.3",
-        "@adonisjs/redis": "^7.0.4",
         "@adonisjs/require-ts": "^2.0.13",
         "@adonisjs/sink": "^5.4.2",
         "@types/mime-types": "^2.1.1",
