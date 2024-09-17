@@ -10,7 +10,7 @@
         "clean": "del-cli build",
         "build": "npm run compile",
         "prepublishOnly": "npm run build",
-        "copyfiles": "copyfiles \"templates/**/*.txt\" \"instructions.md\" build",
+        "copyfiles": "copyfiles \"templates/*.txt\" \"instructions.md\" build",
         "compile": "npm run lint && npm run clean && tsc && npm run copyfiles",
         "lint": "eslint . --ext=.ts",
         "format": "prettier --write .",
@@ -41,6 +41,7 @@
         "@types/mime-types": "^2.1.1",
         "@types/node": "^20.5.0",
         "copyfiles": "^2.4.1",
+        "cz-conventional-changelog": "^3.3.0",
         "del-cli": "^5.0.0",
         "eslint": "^8.33.0",
         "eslint-config-prettier": "^8.6.0",
@@ -52,7 +53,7 @@
         "typescript": "^5.1.6"
     },
     "dependencies": {
-        "@poppinss/utils": "^6.7.3",
+        "@poppinss/utils": "^6.8.1",
         "@queuedash/api": "^2.1.1",
         "@trpc/server": "^10.45.2",
         "bullmq": "^5.13.0"
@@ -80,7 +81,7 @@
         "build/src",
         "build/templates",
         "build/instructions.js",
-        "build/instructions.d.ts"
+        "build/instructions.md"
     ],
     "eslintConfig": {
         "extends": [
@@ -112,6 +113,11 @@
         "arrowParens": "always",
         "printWidth": 100
     },
+    "config": {
+        "commitizen": {
+            "path": "cz-conventional-changelog"
+        }
+    },
     "np": {
         "contents": ".",
         "anyBranch": false
@@ -119,23 +125,15 @@
     "publishConfig": {
         "access": "public"
     },
-    "nyc": {
-        "exclude": [
-            "test"
-        ],
-        "extension": [
-            ".ts"
-        ]
-    },
-    "typings": "build/adonis-typings/index.d.ts",
     "adonisjs": {
         "instructions": "./build/instructions.js",
-        "types": "@brighthustle/adonis-jobs",
+        "instructionsMd": "./build/instructions.md",
         "providers": [
             "@brighthustle/adonis-jobs"
         ],
         "commands": [
             "@brighthustle/adonis-jobs/build/commands"
-        ]
+        ],
+        "types": "@brighthustle/adonis-jobs"
     }
 }
