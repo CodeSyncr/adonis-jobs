@@ -32,7 +32,7 @@ export class BullManager implements BullManagerContract {
   private _shutdowns: (() => Promise<any>)[] = []
 
   public get queues() {
-    if (Object.keys(this._queues).length > 0) {
+    if (this._queues) {
       return this._queues
     }
 
