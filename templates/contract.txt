@@ -3,3 +3,9 @@ declare module '@ioc:Adonis/Addons/Bull' {
     local: BullConnectionContract
   }
 }
+
+declare module '@ioc:Adonis/Addons/Bull' {
+  interface BullConnectionsList {
+    local: BullConnectionContract
+  }
+}

@@ -28,7 +28,7 @@ export class BullManager implements BullManagerContract {
     protected jobs: string[]
   ) {}
 
-  private _queues: { [key: string]: QueueContract } = {}
+  private _queues: { [key: string]: QueueContract }
   private _shutdowns: (() => Promise<any>)[] = []
 
   public get queues() {

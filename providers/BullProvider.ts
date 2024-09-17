@@ -73,7 +73,7 @@ export default class BullProvider {
             createContext: async () => ({
               queues: Object.keys(queues).reduce((acc, displayName) => {
                 acc.push({
-                  queue: queues[displayName],
+                  queue: queues[displayName].bull,
                   displayName,
                   type: 'bullmq' as const,
                 })
@@ -134,11 +134,5 @@ export default class BullProvider {
 
   public async shutdown() {
     await this.app.container.use<'Adonis/Addons/Bull'>('Adonis/Addons/Bull').shutdown()
-  }
-}
-
-declare module '@ioc:Adonis/Core/Route' {
-  interface RouterContract {
-    jobs: (pattern?: string) => RouteGroupContract
   }
 }
