@@ -1,115 +1,116 @@
-# AdonisJS package starter kit
+![adonis-jobs](https://socialify.git.ci/CodeSyncr/adonis-jobs?description=1&descriptionEditable=Bull%20Job%20Wrapper%20for%20Adonis%20JS&forks=1&issues=1&language=1&name=1&owner=1&pattern=Signal&pulls=1&stargazers=1&theme=Light)
 
-> A boilerplate for creating AdonisJS packages
+## What's this
 
-This repo provides you with a starting point for creating AdonisJS packages. Of course, you can create a package from scratch with your folder structure and workflow. However, using this starter kit can speed up the process, as you have fewer decisions to make.
+`@brighthustle/adonis-jobs` is a powerful queue system designed specifically for AdonisJS applications, leveraging the reliability and scalability of BullMQ, a Redis-based queue for Node.js. Inspired from `@rocketseat/adonis-bull`, it offers enhanced functionality tailored to AdonisJS's ecosystem.
 
-## Setup
+## Table of Contents
 
-- Clone the repo on your computer, or use `giget` to download this repo without the Git history.
-  ```sh
-  npx giget@latest gh:adonisjs/pkg-starter-kit
-  ```
-- Install dependencies.
-- Update the `package.json` file and define the `name`, `description`, `keywords`, and `author` properties.
-- The repo is configured with an MIT license. Feel free to change that if you are not publishing under the MIT license.
+1. [Installation](#installation)
+2. [Configuration](#configuration)
+3. [Usage](#usage)
+   - [Job Dispatching](#job-dispatching)
+   - [Job Creation](#job-creation)
+   - [Job Lifecycle](#job-lifecycle)
+4. [Advanced Features](#advanced-features)
+   - [Job Attempts and Retries](#job-attempts-and-retries)
+   - [Running the Queue Worker](#running-the-queue-worker)
+5. [Dependencies](#dependencies)
 
-## Folder structure
+## Installation <a id="installation"></a>
 
-The starter kit mimics the folder structure of the official packages. Feel free to rename files and folders as per your requirements.
+Begin by installing `@brighthustle/adonis-jobs` using npm:
 
-```
-├── providers
-├── src
-├── bin
-├── stubs
-├── configure.ts
-├── index.ts
-├── LICENSE.md
-├── package.json
-├── README.md
-├── tsconfig.json
-├── tsnode.esm.js
+```bash
+npm install @brighthustle/adonis-jobs
 ```
 
-- The `configure.ts` file exports the `configure` hook to configure the package using the `node ace configure` command.
-- The `index.ts` file is the main entry point of the package.
-- The `tsnode.esm.js` file runs TypeScript code using TS-Node + SWC. Please read the code comment in this file to learn more.
-- The `bin` directory contains the entry point file to run Japa tests.
-- Learn more about [the `providers` directory](./providers/README.md).
-- Learn more about [the `src` directory](./src/README.md).
-- Learn more about [the `stubs` directory](./stubs/README.md).
+## Configuration <a id="configuration"></a>
 
-### File system naming convention
+After installation, configure the package to adapt it to your AdonisJS project:
 
-We use `snake_case` naming conventions for the file system. The rule is enforced using ESLint. However, turn off the rule and use your preferred naming conventions.
+```bash
+node ace configure @brighthustle/adonis-jobs
+```
 
-## Peer dependencies
+## Usage <a id="usage"></a>
 
-The starter kit has a peer dependency on `@adonisjs/core@6`. Since you are creating a package for AdonisJS, you must make it against a specific version of the framework core.
+### Job Dispatching <a id="job-dispatching"></a>
 
-If your package needs Lucid to be functional, you may install `@adonisjs/lucid` as a development dependency and add it to the list of `peerDependencies`.
+Utilize the `addTask` method provided by the `bull` provider to enqueue jobs.
+Example:
 
-As a rule of thumb, packages installed in the user application should be part of the `peerDependencies` of your package and not the main dependency.
+> Please note that #app is an alia that was created by me, and isn't in adonis by default... So if you want to use it, you will need to add it in your tsconfig and package.json
 
-For example, if you install `@adonisjs/core` as a main dependency, then essentially, you are importing a separate copy of `@adonisjs/core` and not sharing the one from the user application. Here is a great article explaining [peer dependencies](https://blog.bitsrc.io/understanding-peer-dependencies-in-javascript-dbdb4ab5a7be).
+```typescript
+import app from '@adonisjs/core/services/app'
+import queue from '@brighthustle/adonis-jobs/services/main'
 
-## Published files
+```
 
-Instead of publishing your repo's source code to npm, you must cherry-pick files and folders to publish only the required files.
+### Job Creation <a id="job-creation"></a>
 
-The cherry-picking uses the `files` property inside the `package.json` file. By default, we publish the following files and folders.
+Generate new job classes using the `node ace make:job {job}` command.
 
-```json
-{
-  "files": ["build/src", "build/providers", "build/stubs", "build/index.d.ts", "build/index.js"]
+Example:
+
+```ts
+// app/jobs/register_stripe_customer.ts
+import { JobHandlerContract, Job } from '@brighthustle/adonis-jobs/types'
+
+export type RegisterStripeCustomerPayload = {
+  userId: string
 }
-```
 
-If you create additional folders or files, mention them inside the `files` array.
-
-## Exports
-
-[Node.js Subpath exports](https://nodejs.org/api/packages.html#subpath-exports) allows you to define the exports of your package regardless of the folder structure. This starter kit defines the following exports.
-
-```json
+export default class RegisterStripeCustomer
+  implements JobHandlerContract<RegisterStripeCustomerPayload>
 {
-  "exports": {
-    ".": "./build/index.js",
-    "./types": "./build/src/types.js"
+  public async handle(job: Job<RegisterStripeCustomerPayload>) {
+    // Logic to register a Stripe customer
+    const { userId } = job.data
+    // Perform Stripe registration process
+  }
+
+  public async failed(job: Job<RegisterStripeCustomerPayload>) {
+    // Logic to handle failed job attempts
+    const { userId } = job.data
+    // Send notification or log failure
   }
 }
 ```
 
-- The dot `.` export is the main export.
-- The `./types` exports all the types defined inside the `./build/src/types.js` file (the compiled output).
+Register the new job into `start/jobs.ts`
 
-Feel free to change the exports as per your requirements.
+```ts
+// start/jobs.ts
+const jobs: Record<string, Function> = {}
 
-## Testing
+export { jobs }
+```
 
-We configure the [Japa test runner](https://japa.dev/) with this starter kit. Japa is used in AdonisJS applications as well. Just run one of the following commands to execute tests.
+### Job Lifecycle <a id="job-lifecycle"></a>
 
-- `npm run test`: This command will first lint the code using ESlint and then run tests and report the test coverage using [c8](https://github.com/bcoe/c8).
-- `npm run quick:test`: Runs only the tests without linting or coverage reporting.
+Define the `handle` method to execute job logic and the `failed` method to handle failed attempts.
 
-The starter kit also has a Github workflow file to run tests using Github Actions. The tests are executed against `Node.js 20.x` and `Node.js 21.x` versions on both Linux and Windows. Feel free to edit the workflow file in the `.github/workflows` directory.
+## Advanced Features <a id="advanced-features"></a>
 
-## TypeScript workflow
+### Job Attempts and Retries <a id="job-attempts-and-retries"></a>
 
-- The starter kit uses [tsc](https://www.typescriptlang.org/docs/handbook/compiler-options.html) for compiling the TypeScript to JavaScript when publishing the package.
-- [TS-Node](https://typestrong.org/ts-node/) and [SWC](https://swc.rs/) are used to run tests without compiling the source code.
-- The `tsconfig.json` file is extended from [`@adonisjs/tsconfig`](https://github.com/adonisjs/tooling-config/tree/main/packages/typescript-config) and uses the `NodeNext` module system. Meaning the packages are written using ES modules.
-- You can perform type checking without compiling the source code using the `npm run type check` script.
+- Customize the retry setting for jobs, configurable in the `config/queue.ts` file.
+- Adjust attempts and delays per job or globally.
 
-Feel free to explore the `tsconfig.json` file for all the configured options.
+### Running the Queue Worker <a id="running-the-queue-worker"></a>
 
-## ESLint and Prettier setup
+Initiate the queue worker using the `node ace queue:listen` command.
 
-The starter kit configures ESLint and Prettier. Both configurations are stored within the `package.json` file and use our [shared config](https://github.com/adonisjs/tooling-config/tree/main/packages). Feel free to change the configuration, use custom plugins, or remove both tools altogether.
+- Specify queues or run the UI for monitoring and managing queues.
 
-## Using Stale bot
+## Dependencies <a id="dependencies"></a>
 
-The [Stale bot](https://github.com/apps/stale) is a Github application that automatically marks issues and PRs as stale and closes after a specific duration of inactivity.
+- **@queuedash/api**: Provides API endpoints for monitoring and managing queues.
+- **@trpc/server**: Starts QueueDash API server.
+- **bullmq**: The core library for handling queues.
 
-Feel free to delete the `.github/stale.yml` and `.github/lock.yml` files if you decide not to use the Stale bot.
+# Author
+
+Kumar Yash
