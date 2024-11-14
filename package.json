@@ -1,139 +1,118 @@
 {
-    "name": "@brighthustle/adonis-jobs",
-    "version": "1.1.2",
-    "description": "Bull Job Wrapper for adonis v5",
-    "main": "build/providers/BullProvider.js",
-    "scripts": {
-        "mrm": "mrm --preset=@adonisjs/mrm-preset",
-        "pretest": "npm run lint",
-        "test": "node -r @adonisjs/require-ts/build/register bin/test.ts",
-        "clean": "del-cli build",
-        "build": "npm run compile",
-        "prepublishOnly": "npm run build",
-        "copyfiles": "copyfiles \"templates/*.txt\" \"instructions.md\" build",
-        "compile": "npm run lint && npm run clean && tsc && npm run copyfiles",
-        "lint": "eslint . --ext=.ts",
-        "format": "prettier --write .",
-        "commit": "git-cz",
-        "release": "np --message=\"chore(release): %s\" --no-tests --any-branch",
-        "version": "npm run build",
-        "sync-labels": "github-label-sync --labels ./node_modules/@adonisjs/mrm-preset/gh-labels.json BrightHustle/adonis-jobs"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/CodeSyncr/adonis-jobs.git"
-    },
-    "author": "Kumar Yash",
-    "license": "MIT",
-    "keywords": [
-        "adonisjs",
-        "jobs",
-        "queue",
-        "background-jobs",
-        "redis",
-        "bullmq"
+  "name": "adonis-jobs",
+  "description": "Bull Job Wrapper for adonis v5",
+  "version": "1.0.9",
+  "main": "./build/index.js",
+  "type": "module",
+  "files": [
+    "build/src",
+    "build/providers",
+    "build/commands",
+    "build/stubs",
+    "build/services",
+    "build/configure.js",
+    "build/configure.d.ts",
+    "build/index.d.ts",
+    "build/index.js",
+    "!build/bin",
+    "!build/tests"
+  ],
+  "exports": {
+    ".": "./build/index.js",
+    "./queue_provider": "./build/providers/queue_provider.js",
+    "./bull_manager": "./build/src/bull_manager.js",
+    "./services/main": "./build/services/main.js",
+    "./commands": "./build/commands/main.js",
+    "./commands/*": "./build/commands/*.js",
+    "./types": "./build/src/types/main.js"
+  },
+  "scripts": {
+    "clean": "del-cli build",
+    "copy:templates": "copyfiles \"stubs/**/*.stub\" build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext=.ts",
+    "format": "prettier --write .",
+    "quick:test": "node --import=./tsnode.esm.js --enable-source-maps bin/test.ts",
+    "pretest": "npm run lint",
+    "test": "c8 npm run quick:test",
+    "prebuild": "npm run lint && npm run clean",
+    "build": "tsc && npm run index:commands",
+    "postbuild": "npm run copy:templates",
+    "release": "np",
+    "version": "npm run build",
+    "prepublishOnly": "npm run build",
+    "index:commands": "adonis-kit index build/commands"
+  },
+  "devDependencies": {
+    "@adonisjs/assembler": "^7.7.0",
+    "@adonisjs/core": "^6.12.0",
+    "@adonisjs/eslint-config": "^1.3.0",
+    "@adonisjs/prettier-config": "^1.3.0",
+    "@adonisjs/tsconfig": "^1.3.0",
+    "@japa/assert": "^3.0.0",
+    "@japa/runner": "^3.1.4",
+    "@swc/core": "^1.6.3",
+    "@types/node": "^20.14.5",
+    "c8": "^10.1.2",
+    "copyfiles": "^2.4.1",
+    "del-cli": "^5.1.0",
+    "eslint": "^8.57.0",
+    "np": "^10.0.6",
+    "prettier": "^3.3.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@poppinss/utils": "^6.8.1",
+    "@queuedash/api": "^2.1.1",
+    "@trpc/server": "^10.45.2",
+    "bullmq": "^5.13.0"
+  },
+  "peerDependencies": {
+    "@adonisjs/core": "^6.2.0"
+  },
+  "author": "Kumar Yash",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodeSyncr/adonis-jobs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CodeSyncr/adonis-jobs/issues"
+  },
+  "keywords": [
+    "adonisjs",
+    "jobs",
+    "queue",
+    "background-jobs",
+    "redis",
+    "bullmq"
+  ],
+  "eslintConfig": {
+    "extends": "@adonisjs/eslint-config/package"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "latest"
+  },
+  "np": {
+    "message": "chore(release): %s",
+    "tag": "latest",
+    "branch": "main",
+    "anyBranch": false
+  },
+  "c8": {
+    "reporter": [
+      "text",
+      "html"
     ],
-    "devDependencies": {
-        "@adonisjs/core": "^5.9.0",
-        "@adonisjs/mrm-preset": "^5.0.3",
-        "@adonisjs/require-ts": "^2.0.13",
-        "@adonisjs/sink": "^5.4.2",
-        "@types/mime-types": "^2.1.1",
-        "@types/node": "^20.5.0",
-        "copyfiles": "^2.4.1",
-        "cz-conventional-changelog": "^3.3.0",
-        "del-cli": "^5.0.0",
-        "eslint": "^8.33.0",
-        "eslint-config-prettier": "^8.6.0",
-        "eslint-plugin-adonis": "^2.1.1",
-        "eslint-plugin-prettier": "^4.2.1",
-        "mrm": "^4.1.17",
-        "np": "^7.6.3",
-        "prettier": "^2.8.3",
-        "typescript": "^5.1.6"
-    },
-    "dependencies": {
-        "@poppinss/utils": "^6.8.1",
-        "@queuedash/api": "^2.1.1",
-        "@trpc/server": "^10.45.2",
-        "bullmq": "^5.13.0"
-    },
-    "peerDependencies": {
-        "@adonisjs/core": "^5.9.0"
-    },
-    "mrmConfig": {
-        "core": false,
-        "license": "MIT",
-        "services": [
-            "github-actions"
-        ],
-        "minNodeVersion": "latest",
-        "probotApps": [
-            "lock"
-        ],
-        "runGhActionsOnWindows": true
-    },
-    "types": "build/adonis-typings/index.d.ts",
-    "files": [
-        "build/adonis-typings",
-        "build/commands",
-        "build/providers",
-        "build/src",
-        "build/templates",
-        "build/instructions.js",
-        "build/instructions.md"
-    ],
-    "eslintConfig": {
-        "extends": [
-            "plugin:adonis/typescriptPackage",
-            "prettier"
-        ],
-        "plugins": [
-            "prettier"
-        ],
-        "rules": {
-            "prettier/prettier": [
-                "error",
-                {
-                    "endOfLine": "auto"
-                }
-            ]
-        }
-    },
-    "eslintIgnore": [
-        "build"
-    ],
-    "prettier": {
-        "trailingComma": "es5",
-        "semi": false,
-        "singleQuote": true,
-        "useTabs": false,
-        "quoteProps": "consistent",
-        "bracketSpacing": true,
-        "arrowParens": "always",
-        "printWidth": 100
-    },
-    "config": {
-        "commitizen": {
-            "path": "cz-conventional-changelog"
-        }
-    },
-    "np": {
-        "contents": ".",
-        "anyBranch": false
-    },
-    "publishConfig": {
-        "access": "public"
-    },
-    "adonisjs": {
-        "instructions": "./build/instructions.js",
-        "instructionsMd": "./build/instructions.md",
-        "providers": [
-            "@brighthustle/adonis-jobs"
-        ],
-        "commands": [
-            "@brighthustle/adonis-jobs/build/commands"
-        ],
-        "types": "@brighthustle/adonis-jobs"
-    }
+    "exclude": [
+      "tests/**"
+    ]
+  }
 }

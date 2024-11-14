@@ -1,0 +1,27 @@
+{{{
+  exports({ to: app.makePath('app/jobs/base_queue.ts') })
+}}}
+import { JobContract, JobsOptions } from 'adonis-jobs/types'
+import Tasks from './tasks/index.js'
+import { BullQueue } from '#contracts/queue'
+
+export default class BaseQueue implements JobContract {
+  public key = BullQueue.default
+
+  public static Queues = BullQueue
+
+  static get tasks() {
+    return Tasks as Record<string, any>
+  }
+
+  public options: JobsOptions = { priority: 100 }
+
+  public async handle(job: { data: { taskName: any } }) {
+    const taskName = job.data.taskName as keyof typeof Tasks
+
+    if (BaseQueue.tasks[taskName]) {
+      const { default: JobClass } = await import(`./task/${taskName}.js`)
+      await new JobClass().handle(job)
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{{{
+  exports({ to: app.makePath('app/jobs/tasks/' + filename + '.ts') })
+}}}
+import { JobContract } from 'adonis-jobs/types'
+
+export default class {{ className }} implements JobContract {
+  public key = this.constructor.name
+
+  public async handle(job: { data: any }) {
+    const { data } = job
+    // Do something with you job data
+  }
+}

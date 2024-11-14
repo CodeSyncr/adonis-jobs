@@ -1,0 +1,16 @@
+{{{
+  exports({ to: app.startPath('bull.ts') })
+}}}
+/*
+|--------------------------------------------------------------------------
+| Define HTTP limiters
+|--------------------------------------------------------------------------
+|
+| The "bull.define" method creates an HTTP middleware to start bull
+| process on a route or a group of routes.
+|
+*/
+
+import { Bull } from 'adonis-jobs'
+
+Bull.process()

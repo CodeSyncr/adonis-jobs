@@ -1,4 +1,8 @@
-import { JobContract } from '@ioc:Adonis/Addons/Bull'
+{{{
+  exports({ to: app.makePath('app/jobs/' + filename + '.ts') })
+}}}
+import { JobsOptions } from 'adonis-jobs/types'
+import BaseQueue from './base_queue.js'
 
 /*
 |--------------------------------------------------------------------------
@@ -12,11 +16,8 @@ import { JobContract } from '@ioc:Adonis/Addons/Bull'
 | https://docs.bullmq.io/
 */
 
-export default class {{ filename }} implements JobContract {
-  public key = '{{ filename }}'
+export default class {{ className }} extends BaseQueue {
+  public key = BaseQueue.Queues.{{ className }}
 
-  public async handle(job) {
-    const { data } = job
-    // Do something with you job data
-  }
+  public options: JobsOptions = { priority: {{ priority }} }
 }

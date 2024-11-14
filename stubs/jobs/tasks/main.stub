@@ -1,0 +1,4 @@
+{{{
+  exports({ to: app.makePath('app/jobs/tasks/index.ts') })
+}}}
+export default {}

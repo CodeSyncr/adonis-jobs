@@ -1,0 +1,6 @@
+{{{
+  exports({ to: app.startPath('job.ts') })
+}}}
+const jobs = []
+
+export default jobs

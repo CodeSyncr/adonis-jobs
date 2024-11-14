@@ -1,0 +1,4 @@
+{{{
+  exports({ to: app.makePath('contracts/queue.ts') })
+}}}
+export const BullQueue = {}
