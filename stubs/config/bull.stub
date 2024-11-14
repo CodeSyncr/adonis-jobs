@@ -1,6 +1,6 @@
 {{{ exports({ to: app.configPath('bull.ts') }) }}}
 import env from '#start/env'
-import { defineConfig } from 'adonis-jobs'
+import { defineConfig } from '@brighthustle/adonis-jobs'
 
 const bullConfig = defineConfig({
   connection: {

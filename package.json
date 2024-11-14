@@ -1,5 +1,5 @@
 {
-  "name": "adonis-jobs",
+  "name": "@brighthustle/adonis-jobs",
   "description": "Bull Job Wrapper for adonis v5",
   "version": "1.0.9",
   "main": "./build/index.js",

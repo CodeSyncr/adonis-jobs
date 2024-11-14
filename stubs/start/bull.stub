@@ -11,6 +11,6 @@
 |
 */
 
-import { Bull } from 'adonis-jobs'
+import queue from '@brighthustle/adonis-jobs'
 
-Bull.process()
+queue.process()

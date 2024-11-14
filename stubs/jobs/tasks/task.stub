@@ -1,7 +1,7 @@
 {{{
   exports({ to: app.makePath('app/jobs/tasks/' + filename + '.ts') })
 }}}
-import { JobContract } from 'adonis-jobs/types'
+import { JobContract } from '@brighthustle/adonis-jobs/types'
 
 export default class {{ className }} implements JobContract {
   public key = this.constructor.name

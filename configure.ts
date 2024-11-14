@@ -26,8 +26,8 @@ export async function configure(command: ConfigureCommand) {
   await codemods.makeUsingStub(stubsRoot, "jobs/tasks/main.stub", {});
 
   await codemods.updateRcFile((rcFile: any) => {
-    rcFile.addProvider("adonis-jobs/queue_provider");
-    rcFile.addCommand("adonis-jobs/commands");
+    rcFile.addProvider("@brighthustle/adonis-jobs/queue_provider");
+    rcFile.addCommand("@brighthustle/adonis-jobs/commands");
   });
 
   await codemods.defineEnvVariables({

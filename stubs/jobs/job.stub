@@ -1,7 +1,7 @@
 {{{
   exports({ to: app.makePath('app/jobs/' + filename + '.ts') })
 }}}
-import { JobsOptions } from 'adonis-jobs/types'
+import { JobsOptions } from '@brighthustle/adonis-jobs/types'
 import BaseQueue from './base_queue.js'
 
 /*
