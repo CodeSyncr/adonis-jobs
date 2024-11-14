@@ -1,5 +1,5 @@
 {{{
-  exports({ to: app.startPath('job.ts') })
+  exports({ to: app.startPath('jobs.ts') })
 }}}
 const jobs = []
 

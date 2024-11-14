@@ -20,7 +20,7 @@ export default class BaseQueue implements JobContract {
     const taskName = job.data.taskName as keyof typeof Tasks
 
     if (BaseQueue.tasks[taskName]) {
-      const { default: JobClass } = await import(`./task/${taskName}.js`)
+      const { default: JobClass } = await import('./task/' + taskName + '.js')
       await new JobClass().handle(job)
     }
   }
