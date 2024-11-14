@@ -1,4 +1,4 @@
-![adonis-jobs](https://socialify.git.ci/CodeSyncr/adonis-jobs?description=1&descriptionEditable=Bull%20Job%20Wrapper%20for%20Adonis%20JS&forks=1&issues=1&language=1&name=1&owner=1&pattern=Signal&pulls=1&stargazers=1&theme=Light)
+![adonis-jobs](https://socialify.git.ci/CodeSyncr/adonis-jobs/image?description=1&descriptionEditable=Bull%20Job%20Wrapper%20for%20Adonis%20JS&forks=1&issues=1&language=1&name=1&owner=1&pattern=Signal&pulls=1&stargazers=1&theme=Light)
 
 ## What's this
 
